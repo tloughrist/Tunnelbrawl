@@ -10,6 +10,7 @@ export default function HostButtonsBegin({ games, setGames, setSelectedGame }) {
 
   async function handleStart() {
     const gamePkg = await startGame(game.id);
+    if (!gamePkg) return;
     const gamesSans = games.filter((pkg) => pkg.game.id !== gamePkg.game.id);
     const newGames = [...gamesSans, gamePkg];
     setGames(newGames);
@@ -17,6 +18,7 @@ export default function HostButtonsBegin({ games, setGames, setSelectedGame }) {
 
   async function handleCancel() {
     const gamePkgs = await cancelGame(game.id);
+    if (!gamePkgs) return;
     setSelectedGame("none");
     setGames(gamePkgs);
   };

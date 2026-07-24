@@ -13,6 +13,9 @@ export default async function submitUser(userId, newUserObj) {
     const usr = await res.json();
     return usr;
   } else {
-    alert(res.errors);
+    const body = await res.json().catch(() => ({}));
+    const m = Array.isArray(body.errors) ? body.errors.join(", ") : body.errors;
+    alert(m || "Something went wrong updating your account.");
+    return null;
   }
 };

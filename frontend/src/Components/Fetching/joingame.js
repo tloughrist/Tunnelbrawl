@@ -12,6 +12,11 @@ export default async function joinGame(game_id, user_id) {
       game_id: game_id,
     }),
   });
-  const publicGames = await response.json();
-  return publicGames;
+  if (response.ok) {
+    return await response.json();
+  }
+  const body = await response.json().catch(() => ({}));
+  const message = Array.isArray(body.errors) ? body.errors.join(", ") : body.errors;
+  alert(message || "Could not join the game.");
+  return null;
 };

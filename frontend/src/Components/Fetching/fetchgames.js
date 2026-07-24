@@ -7,7 +7,6 @@ export default async function fetchGames(userId) {
   if (response.ok) {
     const pkgs = await response.json();
     return pkgs;
-  } else {
-    alert(response.errors);
   }
+  return [];
 };

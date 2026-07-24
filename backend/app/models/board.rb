@@ -313,34 +313,39 @@ class Board < ApplicationRecord
       when "p"
         pawn(active_loc, active_piece[0], active_status)
       else
-        puts("error: wrong piece code")
+        # Not a movable piece (empty square "em" or block "xx"): no legal moves.
+        {moves: [], captures: []}
       end
     end
  
     legal_hsh = show_moves(active_loc, active_piece, active_status)
   end
 
+  # Pure query: returns the open camp squares a hand piece may be placed on.
+  # Must NOT mutate/persist board state — it is called during move validation
+  # (is_legal?) as well as for display (show_legal applies the highlights itself).
   def legal_places(piece_loc)
     color = self.game[:turn]
     empties = self.camp(color).select {|k,v| v.to_s[0..1] == "em"}
-    empties.keys.each {|key| empties[key] = "#{empties[key].to_s[0..15]}move"}
-    self.update(empties)
-    legal_placement = empties.keys.each {|key| key.to_s}
-    {moves: legal_placement, captures: []}
+    {moves: empties.keys, captures: []}
   end
 
-  def is_legal?(start_loc, end_loc, user_id) 
+  def is_legal?(start_loc, end_loc, user_id)
     turn = self.game[:turn]
     phase = self.game[:phase]
-    #player = self.game.players.select {|player| player[:user_id] == user_id}
-    #For testing:
-    player = self.game.players.select {|player| player[:color] == turn}
 
-    piece = self.attributes.select {|k,v| k.to_s == start_loc}
-    piece_color = piece[start_loc][0]
-    if turn == player[0][:color] && player[0][:color][0] == piece_color
+    # The requester must be a player in this game AND it must be their turn.
+    # (Do not trust the client to only move on its own turn.)
+    player = self.game.players.find_by(user_id: user_id)
+    return false unless player && player.color == turn
+
+    piece = self.attributes[start_loc]
+    return false if piece.nil?
+    piece_color = piece[0]
+
+    if player.color[0] == piece_color
       legal_hsh = {}
-      color = self.game[:turn]
+      color = turn
       if is_hand?(start_loc, color) && phase == "place"
         legal_hsh = legal_places(start_loc)
       elsif !is_hand?(start_loc, color) && phase == "move"
@@ -461,11 +466,13 @@ class Board < ApplicationRecord
           self.update({square.to_sym => "#{player.color[0]}q_s_highlight--none"})
           player.update({:queening => player[:queening] - 1})
         elsif blocks.size == 4
-          square = blocks.keys[rand(empties.keys.size)]
+          square = blocks.keys[rand(blocks.keys.size)]
           self.update({square.to_sym => "#{player.color[0]}q_s_highlight--none"})
           player.update({:queening => player[:queening] - 1})
         else
-          return
+          # No room for this player's queen right now — skip them, don't abort
+          # the whole loop (which would drop every other player's queen too).
+          next
         end
       end
     end

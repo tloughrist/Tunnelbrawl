@@ -4,12 +4,14 @@ class UsersController < ApplicationController
   skip_before_action :authorize, only: [:create]
 
   def index
-    render json: User.all, status: :ok
+    # Don't leak every user's email to any logged-in account.
+    render json: User.all.map {|u| { id: u.id, username: u.username, pic_url: u.pic_url }}, status: :ok
   end
-  
+
   def create
     user = User.create(user_params)
     if user.valid?
+      reset_session  # rotate the session id on privilege change (anti session-fixation)
       session[:user_id] = user.id
       render json: user, status: :created
     else
@@ -18,33 +20,25 @@ class UsersController < ApplicationController
   end
 
   def self
-    user = User.find(session[:user_id])
+    user = User.find_by(id: session[:user_id])
     if user
       render json: user, status: :ok
     else
+      reset_session
       render json: { error: "Not authorized" }, status: :unauthorized
     end
   end
 
   def get_friends
     user = User.find(params[:user_id])
-    friends = user.friends
-    if friends.size > 0
-      render json: friends, status: :ok
-    else
-      render json: { errors: "Sorry, you have no friends" }, status: :not_found
-    end
+    # An empty friends list is a valid result, not a 404.
+    render json: user.friends, status: :ok
   end
 
   def get_games
     user = User.find(params[:user_id])
-    games = user.games
-    if games.size > 0
-      gamePackages = games.map {|game| game.package}
-      render json: gamePackages, status: :ok
-    else
-      render json: { errors: "Sorry, you have no games" }, status: :not_found
-    end
+    gamePackages = user.games.map { |game| game.package }
+    render json: gamePackages, status: :ok
   end
 
   def update
@@ -65,6 +59,7 @@ class UsersController < ApplicationController
     if params[:id].to_i == session[:user_id]
       user = User.find(params[:id])
       user.destroy
+      reset_session  # don't leave a cookie authorizing a now-deleted account
       head :no_content
     else
       render json: { error: "Not authorized" }, status: :unauthorized

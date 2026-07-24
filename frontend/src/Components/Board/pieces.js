@@ -32,14 +32,17 @@ export default function Piece({type, src, alt, setterBundle}) {
           swal("Illegal move")
         }
         return;
-      } else if (spaceItself.contents.type === "empty") {
-        return;
-      } else {
+      } else if (spaceItself.contents.color === color) {
         setActivePiece(parseInt(e.target.parentElement.parentElement.id))
         const res = await showmove(boardId, spaceId);
+        if (!res.ok) {
+          return;
+        }
         const gamePkg = await res.json();
         const gamesSans = games.filter(game => game.game.id !== gamePkg.game.id);
         setGames([...gamesSans, gamePkg]);
+      } else {
+        return;
       }
     } else {
       swal("Sorry, it's not your turn.");
@@ -48,6 +51,9 @@ export default function Piece({type, src, alt, setterBundle}) {
 
   async function clear() {
     const res = await clearhighlights(boardId)
+    if (!res.ok) {
+      return;
+    }
     const gamePkg = await res.json();
     const gamesSans = games.filter(game => game.game.id !== gamePkg.game.id);
     setGames([...gamesSans, gamePkg])

@@ -22,7 +22,7 @@ export default function Game({ gamePkg, setGamePkg, setGames, setSelectedGame })
   const setterBundle = {setGames: setGames, setActivePiece: setActivePiece};
   const [game, _setGame] = useState(gamePkg.game);
   const [board, _setBoard] = useState(convert(gamePkg.board, setterBundle));
-  const [color, _setColor] = useState(gamePkg.game.players.find(({user_id}) => user_id === user.id).color);
+  const [color, _setColor] = useState(gamePkg.game.players.find(({user_id}) => user_id === user?.id)?.color);
   const [activePiece, _setActivePiece] = useState();
   const [moveAcknowledged, setMoveAcknowledged] = useState(false);
   const isHost = gamePkg.game.host_id === user.id;
@@ -71,7 +71,7 @@ export default function Game({ gamePkg, setGamePkg, setGames, setSelectedGame })
       setGame(gamePkg.game);
       setBoard(convert(gamePkg.board, setterBundle));
       setBoardId(gamePkg.board.id)
-      setColor(gamePkg.game.players.find(({user_id}) => user_id === user.id).color);
+      setColor(gamePkg.game.players.find(({user_id}) => user_id === user?.id)?.color);
       //Dev only
       //setColor(gamePkg.game.turn)
     }
@@ -83,9 +83,7 @@ export default function Game({ gamePkg, setGamePkg, setGames, setSelectedGame })
     } else if (gamePkg.game.status === "canceled") {
       swal(`${gamePkg.game.title} canceled by ${gamePkg.game.host}.`);
       setSelectedGame("none");
-      const gamePkgProxy = gamePkg;
-      gamePkgProxy.game.status = "pending";
-      setGamePkg(gamePkgProxy);
+      setGamePkg({ ...gamePkg, game: { ...gamePkg.game, status: "pending" } });
     }
   }, [gamePkg]);
 

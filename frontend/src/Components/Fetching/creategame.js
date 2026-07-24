@@ -21,6 +21,9 @@ export default async function createGame(userId, title) {
     const pkg = await res.json();
     return pkg;
   } else {
-    alert(res.errors);
+    const body = await res.json().catch(() => ({}));
+    const message = Array.isArray(body.errors) ? body.errors.join(", ") : body.errors;
+    alert(message || "Something went wrong creating the game.");
+    return null;
   }
 };

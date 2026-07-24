@@ -11,5 +11,13 @@ export default async function changepassword(userId, password) {
       password
     }),
   });
-  return res;
+  if (res.ok) {
+    const usr = await res.json();
+    return usr;
+  } else {
+    const body = await res.json().catch(() => ({}));
+    const m = Array.isArray(body.errors) ? body.errors.join(", ") : body.errors;
+    alert(m || "Something went wrong changing your password.");
+    return null;
+  }
 };

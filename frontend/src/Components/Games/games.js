@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef, createContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { createConsumer } from "@rails/actioncable";
 import Game from './game.js';
 import GameOptions from './gameoptions.js';
@@ -18,9 +18,10 @@ function Games({ }) {
   const [games, _setGames] = useState([]);
   const [selectedGame, setSelectedGame] = useState("none");
   const [gamePkg, _setGamePkg] = useState({});
-  const [cable, setCable] = useState(createConsumer(`${API_BASE}/cable`));
+  const [cable, setCable] = useState(() => createConsumer(`${API_BASE}/cable`));
   const [subscript, setSubscript] = useState({});
   const navigate = useNavigate();
+  const location = useLocation();
 
   const gamesRef = useRef(games);
   const gamePkgRef = useRef(gamePkg);
@@ -55,6 +56,7 @@ function Games({ }) {
       }
     });
     setSubscript(sub);
+    return sub;
   };
 
   useEffect(() => {
@@ -64,7 +66,9 @@ function Games({ }) {
     }
     if (Object.keys(user).length > 0) {
       gameProvider(user.id);
-      setSelectedGame(user.current_game);
+      // A game id passed via navigation (e.g. just joined from the Taproom) wins,
+      // then the user's saved current_game, otherwise nothing selected.
+      setSelectedGame(location.state?.gameId || user.current_game || "none");
     }
   }, [user]);
 
@@ -78,11 +82,19 @@ function Games({ }) {
   }, [isLoggedIn, navigate]);
 
   useEffect(() => {
+    // Clear the previous game's board so it doesn't flash while the new
+    // subscription's first payload is in flight.
+    setGamePkg({});
     cable.subscriptions.remove(subscript);
-    if (selectedGame !== "none") {
-      subscribe();
-    }
+    const sub = selectedGame !== "none" ? subscribe() : null;
+    return () => {
+      if (sub) {
+        cable.subscriptions.remove(sub);
+      }
+    };
   }, [selectedGame]);
+
+  useEffect(() => () => cable.disconnect(), []);
 
   async function handleSelect(value) {
     setSelectedGame(value);

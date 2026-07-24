@@ -1,5 +1,5 @@
 import './App.css';
-import React, { createContext, useState, useEffect, useRef } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 import { API_BASE } from "./config.js";
 import Banner from "./Components/Banner/banner.js";
@@ -17,10 +17,9 @@ export { LoggedInContext, UserContext };
 
 function App() {
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [user, setUser] = useState({});
   const navigate = useNavigate();
-  const userRef = useRef(user);
 
   useEffect(() => {
     async function fetchData() {
@@ -46,13 +45,13 @@ function App() {
 
   function logout() {
     navigate("/home");
-    setUser();
+    setUser({});
     setIsLoggedIn(false);
   };
 
   return (
     <LoggedInContext.Provider value={isLoggedIn}>
-      <UserContext.Provider value={userRef.current}>
+      <UserContext.Provider value={user}>
         <div className="App">
           <Banner />
           <div id="content_panel">

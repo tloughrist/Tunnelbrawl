@@ -12,5 +12,13 @@ export default async function changeprofile(userId, email, pic) {
       pic_url: pic,
       }),
   });
-  return res;
+  if (res.ok) {
+    const usr = await res.json();
+    return usr;
+  } else {
+    const body = await res.json().catch(() => ({}));
+    const m = Array.isArray(body.errors) ? body.errors.join(", ") : body.errors;
+    alert(m || "Something went wrong updating your profile.");
+    return null;
+  }
 };

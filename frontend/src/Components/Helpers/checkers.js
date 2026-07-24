@@ -96,9 +96,9 @@ export function isLocked(game, board) {
   const color = game.turn;
   const boardSpaces = board.filter(({loc}) => isBoard(loc));
   const hasPiece = boardSpaces.filter(({contents}) => contents.color === color);
-  const campSpaces = board.filter(({loc}) => isCamp(loc));
+  const campSpaces = board.filter(({loc}) => isCamp(loc, color));
   const hasRoom = campSpaces.filter(({contents}) => contents.type === "empty");
-  if (hasPiece.length > 0 || hasRoom > 0) {
+  if (hasPiece.length > 0 || hasRoom.length > 0) {
     return false;
   } else {
     return true;

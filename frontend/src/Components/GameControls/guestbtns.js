@@ -9,7 +9,9 @@ export default function GuestButtons({ game, setGames, setSelectedGame }) {
   const player = game.players.find((player) => player.user_id === user.id);
 
   async function handleClick() {
+    if (!player) return;
     const gamesPkg = await leaveGame(player.id);
+    if (!gamesPkg) return;
     setGames(gamesPkg);
     setSelectedGame("none");
   };

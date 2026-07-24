@@ -1,10 +1,11 @@
 class GameChannel < ApplicationCable::Channel
 
   def subscribed
-    stream_from "game#{params[:id]}"
-    game = Game.find(params[:id])
-    package = game.package
-    ActionCable.server.broadcast("game#{game.id}", package)
+    game = Game.find_by(id: params[:id])
+    return reject unless game
+
+    stream_from "game#{game.id}"
+    ActionCable.server.broadcast("game#{game.id}", game.package)
   end
 
 end

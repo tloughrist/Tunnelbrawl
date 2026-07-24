@@ -37,7 +37,7 @@ function Profile({ setUser, logout }) {
       }
     }
     sendHome(isLoggedIn);
-  }, [])
+  }, [isLoggedIn, navigate])
 
   async function handleLogout() {
     await fetch(`${API_BASE}/logout`, {
@@ -61,23 +61,16 @@ function Profile({ setUser, logout }) {
 
   async function handleProfileChange(e) {
     e.preventDefault();
-    const res = await changeprofile(user.id, email, pic);
-    const usr = await res.json();
-    if (usr.errors) {
-      swal(`${usr.errors}`);
-    } else {
-      setUser(usr);
-    }
+    const usr = await changeprofile(user.id, email, pic);
+    if (!usr) return;
+    setUser(usr);
   };
 
   async function handlePasswordChange(e) {
-    const res = await changepassword(user.id, password);
-    const usr = await res.json();
-    if (usr.errors) {
-      alert(usr.errors)
-    } else {
-      setUser(usr);
-    }
+    e.preventDefault();
+    const usr = await changepassword(user.id, password);
+    if (!usr) return;
+    setUser(usr);
   };
 
   return (

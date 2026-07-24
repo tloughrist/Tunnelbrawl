@@ -7,8 +7,7 @@ Rails.application.routes.draw do
   delete "/logout", to: "sessions#destroy"
 
   #standard routes
-  resources :games, only: [:create, :update, :destroy]
-  resources :boards, only: [:update]
+  resources :games, only: [:create, :destroy]
   resources :users, only: [:index, :update, :destroy]
   resources :players, only: [:create, :update, :destroy]
   #This is for future development:
@@ -23,7 +22,6 @@ Rails.application.routes.draw do
   put "boards/move_piece/:board_id", to: "boards#move_piece"
   get "games/public/:user_id", to: "games#get_public"
   put "games/initialize/:game_id", to: "games#initialize_game"
-  put "games/advance/:game_id", to: "games#advance"
 
   #actioncable routing
   mount ActionCable.server => '/cable'

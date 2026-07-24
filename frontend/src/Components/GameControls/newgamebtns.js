@@ -12,6 +12,7 @@ export default function NewGameBtns({ games, setGames, setSelectedGame }) {
   async function handleSubmit(e){
     e.preventDefault();
     const gamePkg = await createGame(user.id, title);
+    if (!gamePkg) return;
     setGames([...games, gamePkg]);
     setSelectedGame(gamePkg.game.id);
   };
@@ -28,7 +29,7 @@ export default function NewGameBtns({ games, setGames, setSelectedGame }) {
                 onChange={(e) => setTitle(e.target.value)}
               />
             </label>
-            <input type="submit" />
+            <input type="submit" value="Create" />
           </form>
         </div>
       </Popup>

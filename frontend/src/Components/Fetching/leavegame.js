@@ -9,6 +9,9 @@ export default async function leave(playerId) {
     const pkg = await res.json();
     return pkg;
   } else {
-    alert(res.errors);
+    const body = await res.json().catch(() => ({}));
+    const m = Array.isArray(body.errors) ? body.errors.join(", ") : body.errors;
+    alert(m || "Something went wrong leaving the game.");
+    return null;
   }
 };

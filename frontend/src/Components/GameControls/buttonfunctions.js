@@ -12,8 +12,8 @@ export async function cancelGame(gameId) {
   return pkg;
 };
 
-export async function leaveGame(gameId, userId) {
-  const pkg = await leave(gameId, userId);
+export async function leaveGame(playerId) {
+  const pkg = await leave(playerId);
   return pkg;
 };
 

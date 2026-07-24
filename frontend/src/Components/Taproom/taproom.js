@@ -16,7 +16,7 @@ function Taproom() {
       }
     }
     sendHome(isLoggedIn);
-  }, [])
+  }, [isLoggedIn, navigate])
 
   return (
     <div>
