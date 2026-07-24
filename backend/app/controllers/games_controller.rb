@@ -5,6 +5,7 @@ class GamesController < SuperController
   def create
     game = Game.new(game_params)
     game.host_id = session[:user_id]  # never trust a client-supplied host
+    game.title = unique_title(game.title)
     if game.save
       # Only build the board + host player once the game itself persisted,
       # otherwise an invalid game leaves orphaned Board/Player rows.
@@ -63,6 +64,17 @@ class GamesController < SuperController
   end
 
   private
+
+  # Guarantee a unique game title: if the requested title is already taken,
+  # append a random number until it isn't. Blank titles are left untouched.
+  def unique_title(desired)
+    desired = desired.to_s.strip
+    return desired if desired.empty? || !Game.exists?(title: desired)
+    loop do
+      candidate = "#{desired} #{rand(1000..9999)}"
+      return candidate unless Game.exists?(title: candidate)
+    end
+  end
 
   def game_params
     params.permit(:title, :no_players, :turn, :round, :phase, :status, :email_notifications, :public)

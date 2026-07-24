@@ -102,6 +102,48 @@ body {
   box-shadow: 7px 7px 10px #cbced1, -7px -7px 10px white;
 }
 
+/* "Create New Game" reveals this small popup card directly below the button.
+   It's absolutely positioned so it overlays content instead of reflowing it. */
+.new_game_container {
+  display: inline-block;
+  position: relative;
+}
+
+.new_game_card {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 10px;
+  z-index: 50;
+  padding: 15px;
+  background: rgb(224, 221, 136);
+  border-radius: 10px;
+  box-shadow: 5px 5px 8px #cbced1, -5px -5px 8px white;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.new_game_card form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.new_game_card label {
+  font-weight: bold;
+  color: #232323;
+}
+
+.new_game_card input[type="text"] {
+  padding: 4px 6px;
+}
+
+.new_game_card input[type="submit"] {
+  margin-top: 4px;
+  cursor: pointer;
+}
+
 .game_container {
   margin: auto;
   display: flex;

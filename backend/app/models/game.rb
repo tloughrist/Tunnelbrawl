@@ -6,6 +6,9 @@ class Game < ApplicationRecord
   has_many :users, through: :players
 
   validates :no_players, numericality: { less_than: 5 }, allow_blank: true
+  # Titles must be unique across games (blank titles are exempt). The controller
+  # de-duplicates on create by appending a number, so this is the safety net.
+  validates :title, uniqueness: true, allow_blank: true
 
   def make_board
     game = self
