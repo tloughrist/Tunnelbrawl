@@ -1,0 +1,30 @@
+# Monorepo top-level ignores. Each app also has its own .gitignore.
+
+# OS / editor
+.DS_Store
+*.swp
+.vscode/
+.idea/
+
+# Env / secrets (never commit)
+.env
+.env.*
+!.env.example
+**/config/master.key
+
+# Backend (Rails)
+backend/log/*
+backend/tmp/*
+!backend/log/.keep
+!backend/tmp/.keep
+backend/storage/*
+!backend/storage/.keep
+backend/public/assets
+/backend/.bundle
+*.rdb
+
+# Frontend (Node/Vite)
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+npm-debug.log*

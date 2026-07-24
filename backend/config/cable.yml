@@ -1,0 +1,15 @@
+# Action Cable uses Solid Cable (Postgres-backed) instead of Redis.
+# Messages live in the primary database (solid_cable_messages table).
+
+development:
+  adapter: solid_cable
+  polling_interval: 0.1.seconds
+  message_retention: 1.day
+
+test:
+  adapter: test
+
+production:
+  adapter: solid_cable
+  polling_interval: 0.1.seconds
+  message_retention: 1.day
