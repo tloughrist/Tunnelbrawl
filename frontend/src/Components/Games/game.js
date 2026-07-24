@@ -60,7 +60,7 @@ export default function Game({ gamePkg, setGamePkg, setGames, setSelectedGame })
 
   function announceMove() {
     if (game.round === 1) {
-      return swal("It's your move.", "After your move, don't forget to place a new piece from your hand onto one of the four squares of your tunnel.");
+      return swal("It's your move.", "After your move, place a reinforcement from your hand into each open square of your tunnel mouth.");
     } else {
       return swal("It's your move.");
     }

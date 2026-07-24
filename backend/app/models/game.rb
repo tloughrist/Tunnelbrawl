@@ -26,6 +26,13 @@ class Game < ApplicationRecord
     round = self[:round]
     no_players = self[:no_players]
     if phase == "place"
+      # A placement just happened. Keep the SAME player in the place phase so
+      # they can place a reinforcement into every open square of their tunnel
+      # mouth; only once their camp is full (place_lock?) do we flip to the move
+      # phase and pass the turn. (fill_camp blocks the camp with "xx" when a
+      # player is out of reserves, which also makes place_lock? true, so a player
+      # with no pieces left to place doesn't get stuck here.)
+      return self unless place_lock?(turn)
       self[:phase] = "move"
       case no_players
       when 2
