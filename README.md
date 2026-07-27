@@ -9,6 +9,8 @@
   Rival clans of dwarves brawl for contested tunnels — every move syncs live over WebSockets.
 </p>
 
+<p>Note that this is an older project that I recently updated so that I could run it live. The UI for login and such is a bit clunky...let's call it quirky.</p>
+
 ---
 
 ## Watch the demo
