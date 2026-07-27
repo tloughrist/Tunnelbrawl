@@ -66,7 +66,6 @@ test:
 #
 production:
   <<: *default
-  database: tunnelbrawl_app_production
-  username: tunnelbrawl_app
-  password: <%= ENV["TUNNELBRAWL_APP_DATABASE_PASSWORD"] %>
-  url: <%= ENV['DATABASE_URL'] %>
+  # Full connection string (host/user/password/database) comes from DATABASE_URL,
+  # which points at the Supabase Postgres instance.
+  url: <%= ENV["DATABASE_URL"] %>

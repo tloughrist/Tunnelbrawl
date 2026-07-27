@@ -1,0 +1,24 @@
+.git
+.gitignore
+.dockerignore
+Dockerfile
+README.md
+
+# Local secrets — injected as env at runtime, never baked into the image
+config/master.key
+
+# Logs / temp / local state
+log/*
+tmp/*
+!tmp/pids
+tmp/pids/*
+storage/*
+
+# Test suite and CI (not needed in the runtime image)
+test
+.rspec
+
+# Editor / OS cruft
+.vscode
+.idea
+.DS_Store

@@ -9,6 +9,10 @@
   Rival clans of dwarves brawl for contested tunnels — every move syncs live over WebSockets.
 </p>
 
+<p align="center">
+  <strong>▶ Play it live: <a href="https://tunnelbrawl.timloughrist.com">tunnelbrawl.timloughrist.com</a></strong>
+</p>
+
 <p>Note that this is an older project that I recently updated so that I could run it live. The UI for login and such is a bit clunky...let's call it quirky.</p>
 
 ---
@@ -17,7 +21,7 @@
 
 [![Watch the Tunnel Brawl demo](https://timloughrist.files.wordpress.com/2023/04/ksnip_20230406-104425.png)](https://youtu.be/3sZGFw-KpPc)
 
-*Click the image to watch a walkthrough of the app.* A hosted, playable version is on the roadmap; until then, [run it locally](#running-locally).
+*Click the image to watch a walkthrough of the app.* Or [play the live version](https://tunnelbrawl.timloughrist.com) — or [run it locally](#running-locally).
 
 ## About
 
@@ -37,7 +41,7 @@ Each player commands a clan of eight pawns, two rooks, two knights, two bishops,
 | Background jobs | **Solid Queue** (PostgreSQL), run in-process with Puma |
 | Database | PostgreSQL (Supabase in production) |
 | Auth | Cookie-based sessions with `bcrypt` (`has_secure_password`) |
-| Deploy target | AWS App Runner (API) + S3/CloudFront (SPA) + Supabase |
+| Deploy (production) | ECS Fargate + ALB (API) · S3/CloudFront (SPA) · Supabase Postgres · CDK IaC |
 
 ### Architecture
 
@@ -135,7 +139,6 @@ This project began in early 2023 as a Flatiron School capstone (originally two r
 
 ## Roadmap
 
-- Hosted, publicly playable deployment (AWS + Supabase)
 - Friends list and private games
 - Asynchronous games with email notifications
 - In-app messaging and profile pictures

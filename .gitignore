@@ -6,10 +6,11 @@
 .vscode/
 .idea/
 
-# Env / secrets (never commit)
+# Env / secrets (never commit). The mode-specific Vite files
+# (.env.development, .env.production) hold only public VITE_* URLs and ARE committed.
 .env
-.env.*
-!.env.example
+.env.local
+.env.*.local
 **/config/master.key
 
 # Backend (Rails)
