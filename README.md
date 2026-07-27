@@ -9,15 +9,6 @@
   Rival clans of dwarves brawl for contested tunnels — every move syncs live over WebSockets.
 </p>
 
-<p align="center">
-  <img src="frontend/public/pieces/red_king.png" width="46" alt="king" />
-  <img src="frontend/public/pieces/red_queen.png" width="46" alt="queen" />
-  <img src="frontend/public/pieces/red_rook.png" width="46" alt="rook" />
-  <img src="frontend/public/pieces/red_bishop.png" width="46" alt="bishop" />
-  <img src="frontend/public/pieces/red_knight.png" width="46" alt="knight" />
-  <img src="frontend/public/pieces/red_pawn.png" width="46" alt="pawn" />
-</p>
-
 ---
 
 ## Watch the demo
