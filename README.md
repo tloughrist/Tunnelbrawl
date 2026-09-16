@@ -9,10 +9,6 @@
   Rival clans of dwarves brawl for contested tunnels — every move syncs live over WebSockets.
 </p>
 
-<p align="center">
-  <strong>▶ Play it live: <a href="https://tunnelbrawl.timloughrist.com">tunnelbrawl.timloughrist.com</a></strong>
-</p>
-
 <p>Note that this is an older project that I recently updated so that I could run it live. The UI for login and such is a bit clunky...let's call it quirky.</p>
 
 ---
@@ -21,7 +17,7 @@
 
 [![Watch the Tunnel Brawl demo](https://timloughrist.files.wordpress.com/2023/04/ksnip_20230406-104425.png)](https://youtu.be/3sZGFw-KpPc)
 
-*Click the image to watch a walkthrough of the app.* Or [play the live version](https://tunnelbrawl.timloughrist.com) — or [run it locally](#running-locally).
+*Click the image to watch a walkthrough of the app.* Or [run it locally](#running-locally).
 
 ## About
 
